@@ -5,9 +5,9 @@ const ItemList = ({products}) => {
   return (
     <div>
         {
-            products.map((producto)=>
-                <Item idProd={producto.idProd} categoria={producto.categoria} marca={producto.marca} modelo={producto.modelo} precio={producto.precio} stock={producto.stock}/>
-            )
+          products.map((producto)=>
+              <Item idProd={producto.idProd} categoria={producto.categoria} marca={producto.marca} modelo={producto.modelo} precio={producto.precio} stock={producto.stock}/>
+          )
         }
     </div>
   )

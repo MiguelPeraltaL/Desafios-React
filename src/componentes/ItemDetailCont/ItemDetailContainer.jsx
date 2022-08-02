@@ -5,7 +5,7 @@ import ItemDetail from './ItemDetail'
 
 const ItemDetailContainer = () => {
   
-  const [product,setProduct]=useState({})
+  const [product,setProduct]=useState([])
   const {idProd} = useParams()
   
   useEffect(()=>{
@@ -33,8 +33,6 @@ const ItemDetailContainer = () => {
     imprimir()
     .then((result)=>{
       setProduct(result)
-      console.log('result ', result)
-      console.log('product ', product)
     })
     .catch((error)=>{
       console.log("Hay un error con el producto:" + error)
@@ -42,13 +40,16 @@ const ItemDetailContainer = () => {
     .finally(()=>{
       console.log("Termino la consulta de producto")
     })
-
   },[])
 
   return (
     <div>
       <h1>Detalle del producto</h1>
-      <ItemDetail products={product}/>
+      {
+        product.map((producto)=>
+            <ItemDetail idProd={producto.idProd} categoria={producto.categoria} marca={producto.marca} modelo={producto.modelo} precio={producto.precio} stock={producto.stock}/>
+        )
+      }
     </div>
   )
 }

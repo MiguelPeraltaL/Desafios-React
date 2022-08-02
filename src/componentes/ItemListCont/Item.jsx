@@ -1,7 +1,6 @@
 import React from 'react'
-import ItemCount from '../ItemCount'
 import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 const Item = ({idProd, categoria, marca, modelo, precio, stock}) => {
 
@@ -21,14 +20,14 @@ const Item = ({idProd, categoria, marca, modelo, precio, stock}) => {
   },[])
 
   return (
-    <div className='flex'>
-        <div>Sku: {idProd} </div>
-        <div>Categoria: {categoria} </div>
-        <div>Marca: {marca} </div>
-        <div>Modelo: {modelo} </div>
-        <div>Precio: {precio} </div>
-        <div><button><Link to={url}>Ver detalle</Link></button></div>
-        <ItemCount stock={stock}/>
+    <div>
+        <div className='w-1/4 bg-gray-200 m-2 p-2 rounded'>
+          <div>Categoria: {categoria} </div>
+          <div>Marca: {marca} </div>
+          <div>Modelo: {modelo} </div>
+          <div>Precio: {precio} </div>
+          <div><button className='bg-gray-500 p-2 rounded'><Link to={url}>Ver detalle</Link></button></div>
+        </div>
     </div>
   )
 }
