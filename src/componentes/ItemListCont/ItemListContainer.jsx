@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import ItemCount from './ItemCount'
 import ItemList from './ItemList';
 
 const ItemListContainer = () => {
@@ -13,36 +12,12 @@ const ItemListContainer = () => {
       return new Promise((resolve,reject)=>{
         setTimeout(()=>{
           const prod = [
-            {
-              id:"1",
-              categoria:"Deportivo" ,
-              marca: "Porshe",
-              modelo: "911"
-            },
-            {
-              id:"2",
-              categoria:"Todo terreno" ,
-              marca: "Suzuki",
-              modelo: "Jimny"
-            },
-            {  
-              id:"3",  
-              categoria:"Citycar" ,
-              marca: "suzuki",
-              modelo: "Alto"
-            },
-            {
-              id:"4",
-              categoria:"Deportivo" ,
-              marca: "Lamborghini",
-              modelo: "Murcielago"
-            },
-            { 
-              id:"5",
-              categoria:"Hatchback" ,
-              marca: "Volkswagen",
-              modelo: "Golf"
-            }]
+            {idProd:1,categoria:"Deportivo",marca:"Porshe",modelo:"911",precio:1000,stock:5},
+            {idProd:2,categoria:"Todo terreno",marca:"Suzuki",modelo:"Jimny",precio:120,stock:10},
+            {idProd:3,categoria:"Citycar",marca:"suzuki",modelo:"Alto",precio:60,stock:12},
+            {idProd:4,categoria:"Deportivo",marca:"Lamborghini",modelo:"Murcielago",precio:1200,stock:4},
+            {idProd:5,categoria:"Hatchback",marca:"Volkswagen",modelo:"Golf",precio:190,stock:8}
+          ]
             
           if(prod.length === 0){
             reject("No hay productos disponibles")
@@ -70,7 +45,6 @@ const ItemListContainer = () => {
     <div>
       <h1>Listado de productos</h1>
       <ItemList products={product}/>
-      <ItemCount stock="8"/>
     </div>
   )
 }

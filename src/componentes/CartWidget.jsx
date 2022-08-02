@@ -1,8 +1,9 @@
 import React from 'react'
+import carro from '../imagenes/cart.png'
 
 const CartWidget = () => {
   return (
-    <img src='../src/imagenes/cart.png' alt="Cart" width={20} />
+    <img src={carro} alt="Cart" width={25} />
   )
 }
 
