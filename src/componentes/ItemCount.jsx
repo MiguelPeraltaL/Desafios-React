@@ -1,12 +1,15 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom'
+import { myContext } from './HOCContext'
 
-const ItemCount = ({stock}) => {
+const ItemCount = ({stock, idProd}) => {
 
     const [clickCount, setClickCount] = useState(0);
     const [cantidad, setCantidad] = useState(stock);
     const [habilitar, setHabilitar] = useState(false);
+    const { product, setProduct } = useContext(myContext)
+    const { arregloCarro, setArregloCarro } = useContext(myContext)
 
     const contar = () => {
         clickCount < cantidad ? 
@@ -21,8 +24,18 @@ const ItemCount = ({stock}) => {
     const agregar = () => {
         if (clickCount > 0){
             setCantidad(cantidad - clickCount)
+            setHabilitar(true)
+            let objeto = product.filter(producto=> producto.idProd == idProd)
+            setArregloCarro(arregloCarro.push(objeto))
+            // console.log(arregloCarro)
+            const ArregloByPass = product.map(p =>
+                p.idProd == idProd
+                  ? { ...p, stock: cantidad - clickCount }
+                  : p
+              )
+            setProduct(ArregloByPass)
             setClickCount(clickCount * 0)
-            setHabilitar(true)}
+        }
         else{
             console.log("Cantidad debe ser mayor que 0")
         }
@@ -31,15 +44,16 @@ const ItemCount = ({stock}) => {
   return (
     <div>
         <p>Stock Producto {cantidad}</p>
-        <button className='bg-gray-500 p-2 rounded' onClick={descontar}> - </button>
-        <label> {clickCount} </label>
-        <button className='bg-gray-500 p-2 rounded' onClick={contar}> + </button>
+        <div className='flex'>
+        <button className='bg-gray-500 p-2 rounded m-2' onClick={descontar}> - </button>
+        <p> {clickCount} </p>
+        <button className='bg-gray-500 p-2 rounded m-2' onClick={contar}> + </button>
         <button className='bg-gray-500 p-2 rounded m-2' onClick={agregar}> Agregar al carrito </button>
         {
-            habilitar ? 
-            <Link to={'/carrito'}><button className='bg-gray-500 p-2 rounded'> Comprar </button></Link> : 
-            <></>
+            habilitar && 
+            <Link to={'/carrito'}><button className='bg-gray-500 p-2 rounded m-2'> Comprar </button></Link>
         }
+    </div>
     </div>
   )
 }
