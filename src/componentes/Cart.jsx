@@ -4,6 +4,33 @@ import { myContext } from './HOCContext'
 
 export default function Cart() {
   const { product, setProduct, arregloCarro, setArregloCarro } = useContext(myContext)
+  
+  const borrar = (id, num) => {
+    if(num>0){
+      if(num==1){
+        const arregloByPass2 = arregloCarro.filter(producto=> producto.idProd !== id)
+        setArregloCarro(arregloByPass2)
+        console.log(arregloByPass2)
+      }
+      else{
+        const arregloByPass2 = arregloCarro.map(p =>
+          p.idProd == id
+          ? { ...p, stock: p.stock - 1 }
+          : p
+        )
+        setArregloCarro(arregloByPass2)
+        console.log(arregloByPass2)
+      }
+      const arregloByPass = product.map(p =>
+        p.idProd == id
+        ? { ...p, stock: p.stock + 1 }
+        : p
+      )
+      setProduct(arregloByPass)
+      console.log(arregloByPass)
+    }
+  }
+  
   return (
     <div>
       <h1>Detalle Carrito</h1>
@@ -16,6 +43,7 @@ export default function Cart() {
           <p>Modelo: {producto.modelo}</p>
           <p>Cantidad: {producto.stock}</p>
           <p>Precio: {producto.precio}</p>
+          <button className='bg-gray-500 p-2 rounded m-2' onClick={() => borrar(producto.idProd, producto.stock)}> Borrar </button>
         </div>
         )
       }

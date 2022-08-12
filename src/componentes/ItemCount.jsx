@@ -25,25 +25,20 @@ const ItemCount = ({stock, idProd}) => {
             setCantidad(cantidad - clickCount)
             setHabilitar(true)
 
-            // let arregloByPass2 = [...arregloCarro]
             let objeto = product.filter(producto=> producto.idProd == idProd)
             const arregloByPass2 = objeto.map(p =>
                 p.idProd == idProd
                 ? { ...p, stock: clickCount }
                 : p
             )
-            // console.log(arregloByPass2)
-            setArregloCarro(arregloByPass2)
-            // console.log(arregloCarro)
+            setArregloCarro(arregloCarro.concat(arregloByPass2))
 
             const arregloByPass = product.map(p =>
                 p.idProd == idProd
                 ? { ...p, stock: cantidad - clickCount }
                 : p
             )
-            // console.log(product)
             setProduct(arregloByPass)
-            // console.log(product)
             setClickCount(clickCount * 0)
         }
         else{

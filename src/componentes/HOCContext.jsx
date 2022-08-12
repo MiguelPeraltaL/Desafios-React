@@ -17,13 +17,6 @@ export default function HOCContext({ children }) {
       ]
     setProduct(prod)
 
-    const cart = [
-      {idProd:2,categoria:"Todo terreno",marca:"Suzuki",modelo:"Jimny",precio:120,stock:1},
-      {idProd:3,categoria:"Citycar",marca:"suzuki",modelo:"Alto",precio:60,stock:1},
-      {idProd:5,categoria:"Hatchback",marca:"Volkswagen",modelo:"Golf",precio:190,stock:1}
-    ]
-    setArregloCarro(cart)
-
   }, [])
   
   return (
