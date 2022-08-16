@@ -11,7 +11,6 @@ export default function Cart() {
       let acumulado = 0
       arregloCarro.forEach(p => {
           acumulado = acumulado + (p.stock*p.precio)
-          console.log(acumulado)
       })
       setTotal(acumulado)
     }, [arregloCarro])
@@ -21,7 +20,6 @@ export default function Cart() {
       if(num==1){
         const arregloByPass2 = arregloCarro.filter(producto=> producto.idProd !== id)
         setArregloCarro(arregloByPass2)
-        console.log(arregloByPass2)
       }
       else{
         const arregloByPass2 = arregloCarro.map(p =>
@@ -30,7 +28,6 @@ export default function Cart() {
           : p
         )
         setArregloCarro(arregloByPass2)
-        console.log(arregloByPass2)
       }
       const arregloByPass = product.map(p =>
         p.idProd == id
@@ -38,7 +35,6 @@ export default function Cart() {
         : p
       )
       setProduct(arregloByPass)
-      console.log(arregloByPass)
     }
   }
   

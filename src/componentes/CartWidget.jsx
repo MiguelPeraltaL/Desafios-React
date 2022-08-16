@@ -8,7 +8,12 @@ const CartWidget = () => {
   const [cantidad, setCantidad] = useState(0)
 
   useEffect(() => {
-    setCantidad(arregloCarro.length)
+    let acumulado = 0
+    arregloCarro.forEach(p => {
+        acumulado = acumulado + p.stock
+        console.log(acumulado)
+    })
+    setCantidad(acumulado)
   }, [arregloCarro])
 
   return (
