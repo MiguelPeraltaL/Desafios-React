@@ -37,6 +37,10 @@ export default function Cart() {
       setProduct(arregloByPass)
     }
   }
+  const comprar = (id, num) => {
+    alert("Insertar orden de compra en la base")
+    setArregloCarro([])
+  }
   
   return (
     <div>
@@ -56,7 +60,7 @@ export default function Cart() {
       }
       {
         arregloCarro.length > 0 ?
-          (<p>Total:________________________{total}<button className='bg-gray-500 p-2 rounded m-2'>Finalizar compra</button></p>) :
+          (<p>Total:________________________{total}<button className='bg-gray-500 p-2 rounded m-2' onClick={comprar}>Finalizar compra</button></p>) :
           <Link to={'/productos'}>Carrito vacio, ver Productos</Link>
       }      
     </div>
