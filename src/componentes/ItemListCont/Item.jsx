@@ -2,14 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
-const Item = ({idProd, categoria, marca, modelo, precio, stock}) => {
+const Item = ({id, categoria, marca, modelo, precio, stock}) => {
 
   const [url,setUrl]=useState('/detalle/')
 
   useEffect(()=>{
     const asignarValor = ()=>{
       return new Promise((resolve,reject)=>{
-        let newUrl = url + idProd
+        let newUrl = url + id
         resolve(newUrl)
       })
     }

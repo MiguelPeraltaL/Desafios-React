@@ -11,14 +11,11 @@ const ItemListContainer = () => {
 
     const imprimirProductos = ()=>{
       return new Promise((resolve,reject)=>{
-        setTimeout(()=>{
-        
           if(product.length === 0){
             reject("No hay productos disponibles")
           }else{
             resolve(product)
           }
-        },2000)
       })
     }
     

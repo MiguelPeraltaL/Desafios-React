@@ -18,26 +18,27 @@ export default function Cart() {
   const borrar = (id, num) => {
     if(num>0){
       if(num==1){
-        const arregloByPass2 = arregloCarro.filter(producto=> producto.idProd !== id)
+        const arregloByPass2 = arregloCarro.filter(producto=> producto.id !== id)
         setArregloCarro(arregloByPass2)
       }
       else{
         const arregloByPass2 = arregloCarro.map(p =>
-          p.idProd == id
+          p.id == id
           ? { ...p, stock: p.stock - 1 }
           : p
         )
         setArregloCarro(arregloByPass2)
       }
       const arregloByPass = product.map(p =>
-        p.idProd == id
+        p.id == id
         ? { ...p, stock: p.stock + 1 }
         : p
       )
       setProduct(arregloByPass)
     }
   }
-  const comprar = (id, num) => {
+
+  const comprar = () => {
     alert("Insertar orden de compra en la base")
     setArregloCarro([])
   }
@@ -48,13 +49,13 @@ export default function Cart() {
       {
         arregloCarro.map((producto)=>
           <div className='bg-gray-200 m-2 p-2 w-2/4 rounded'>
-            <p>Sku: {producto.idProd}</p>
+            <p>Sku: {producto.id}</p>
             <p>Categoria: {producto.categoria}</p>
             <p>Marca: {producto.marca}</p>
             <p>Modelo: {producto.modelo}</p>
             <p>Cantidad: {producto.stock}</p>
             <p>Precio: {producto.precio}</p>
-            <button className='bg-gray-500 p-2 rounded m-2' onClick={() => borrar(producto.idProd, producto.stock)}> Borrar </button>
+            <button className='bg-gray-500 p-2 rounded m-2' onClick={() => borrar(producto.id, producto.stock)}> Borrar </button>
           </div>
         )
       }

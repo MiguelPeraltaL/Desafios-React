@@ -11,7 +11,6 @@ const CartWidget = () => {
     let acumulado = 0
     arregloCarro.forEach(p => {
         acumulado = acumulado + p.stock
-        console.log(acumulado)
     })
     setCantidad(acumulado)
   }, [arregloCarro])

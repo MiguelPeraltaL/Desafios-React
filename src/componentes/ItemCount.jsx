@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { myContext } from './HOCContext'
 
-const ItemCount = ({stock, idProd}) => {
+const ItemCount = ({stock, id}) => {
 
     const [clickCount, setClickCount] = useState(0);
     const [cantidad, setCantidad] = useState(stock);
@@ -25,16 +25,17 @@ const ItemCount = ({stock, idProd}) => {
             setCantidad(cantidad - clickCount)
             setHabilitar(true)
 
-            let objeto = product.filter(producto=> producto.idProd == idProd)
+            let objeto = product.filter(producto=> producto.id == id)
             const arregloByPass2 = objeto.map(p =>
-                p.idProd == idProd
+                p.id == id
                 ? { ...p, stock: clickCount }
                 : p
             )
+            
             setArregloCarro(arregloCarro.concat(arregloByPass2))
 
             const arregloByPass = product.map(p =>
-                p.idProd == idProd
+                p.id == id
                 ? { ...p, stock: cantidad - clickCount }
                 : p
             )

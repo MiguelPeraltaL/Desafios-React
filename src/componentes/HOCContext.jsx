@@ -1,6 +1,7 @@
 import React from 'react'
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react'
 export const myContext = createContext();
+import { collection, getDocs, getFirestore } from 'firebase/firestore'
 
 export default function HOCContext({ children }) {
     const [product,setProduct]=useState([])
@@ -8,14 +9,27 @@ export default function HOCContext({ children }) {
 
   useEffect(() => {
 
-    const prod = [
-        {idProd:1,categoria:"Deportivo",marca:"Porshe",modelo:"911",precio:1000,stock:5},
-        {idProd:2,categoria:"Todo terreno",marca:"Suzuki",modelo:"Jimny",precio:120,stock:10},
-        {idProd:3,categoria:"Citycar",marca:"suzuki",modelo:"Alto",precio:60,stock:12},
-        {idProd:4,categoria:"Deportivo",marca:"Lamborghini",modelo:"Murcielago",precio:1200,stock:4},
-        {idProd:5,categoria:"Hatchback",marca:"Volkswagen",modelo:"Golf",precio:190,stock:8}
-      ]
-    setProduct(prod)
+    const db = getFirestore()
+    const refCollectionProductos = collection(db, 'productos')
+
+    getDocs(refCollectionProductos).then((res) => {
+      let coleccion = res.docs
+      coleccion = coleccion.map((producto) => {
+        const productoBienFormado = { id: producto.id, ...producto.data() }
+        return productoBienFormado
+      })
+      setProduct(coleccion)
+      console.log(coleccion)
+    })
+
+    // const prod = [
+    //     {idProd:1,categoria:"Deportivo",marca:"Porshe",modelo:"911",precio:1000,stock:5},
+    //     {idProd:2,categoria:"Todo terreno",marca:"Suzuki",modelo:"Jimny",precio:120,stock:10},
+    //     {idProd:3,categoria:"Citycar",marca:"suzuki",modelo:"Alto",precio:60,stock:12},
+    //     {idProd:4,categoria:"Deportivo",marca:"Lamborghini",modelo:"Murcielago",precio:1200,stock:4},
+    //     {idProd:5,categoria:"Hatchback",marca:"Volkswagen",modelo:"Golf",precio:190,stock:8}
+    //   ]
+    // setProduct(prod)
 
   }, [])
   

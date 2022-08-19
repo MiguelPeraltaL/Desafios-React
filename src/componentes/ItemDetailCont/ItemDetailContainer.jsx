@@ -8,19 +8,17 @@ const ItemDetailContainer = () => {
   
   const [prod,setProd]=useState([])
   const { product, setProduct } = useContext(myContext)
-  const {idProd} = useParams()
+  const {id} = useParams()
   
   useEffect(()=>{
 
     const imprimir = ()=>{
       return new Promise((resolve,reject)=>{
-        setTimeout(()=>{
-          if(idProd){
-            resolve(product.filter(producto=> producto.idProd == idProd))
+          if(id){
+            resolve(product.filter(producto=> producto.id == id))
           }else{
             reject("Producto no disponible")
           }
-        },1000)
       })
     }
     
@@ -41,7 +39,7 @@ const ItemDetailContainer = () => {
       <h1>Detalle del producto</h1>
       {
         prod.map((producto)=>
-            <ItemDetail idProd={producto.idProd} categoria={producto.categoria} marca={producto.marca} modelo={producto.modelo} precio={producto.precio} stock={producto.stock}/>
+            <ItemDetail id={producto.id} categoria={producto.categoria} marca={producto.marca} modelo={producto.modelo} precio={producto.precio} stock={producto.stock}/>
         )
       }
     </div>
