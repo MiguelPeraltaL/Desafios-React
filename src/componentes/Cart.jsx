@@ -2,10 +2,17 @@ import React from 'react'
 import { useState, useEffect, useContext } from 'react'
 import { myContext } from './HOCContext'
 import { Link } from 'react-router-dom'
+import { collectionGroup } from 'firebase/firestore'
+import { doc, getDoc, addDoc, collection, updateDoc, getFirestore } from 'firebase/firestore'
 
 export default function Cart() {
   const { product, setProduct, arregloCarro, setArregloCarro } = useContext(myContext)
   const [total, setTotal] = useState(0)
+  const [habilitar, setHabilitar] = useState(false)
+  const [name, setName] = useState('')
+  const [tel, setTel] = useState('')
+  const [email, setEmail] = useState('')
+  const [idOrder, setIdOrder] = useState('')
 
     useEffect(() => {
       let acumulado = 0
@@ -29,24 +36,65 @@ export default function Cart() {
         )
         setArregloCarro(arregloByPass2)
       }
-      const arregloByPass = product.map(p =>
-        p.id == id
-        ? { ...p, stock: p.stock + 1 }
-        : p
-      )
-      setProduct(arregloByPass)
+
+      const db = getFirestore()
+      const refADoc = doc(db, 'productos', id)
+      getDoc(refADoc).then((res) => {
+        const objetoBienFormado = [{ id: res.id, ...res.data() }]
+        let objeto = objetoBienFormado.find(p => p.id==id)
+        const upDoc = doc(db, 'productos', id)
+        updateDoc(upDoc, {stock: objeto.stock + 1})
+      })
+      // const db = getFirestore()
+      // const upDoc = doc(db, 'productos', id)
+      // updateDoc(upDoc, {stock: stockObjeto + 1})
     }
   }
 
   const comprar = () => {
-    alert("Insertar orden de compra en la base")
+    setHabilitar(true)
+  }
+
+  const borrarTodo = () => {
+    arregloCarro.forEach(p => {
+      let idProd = p.id
+      let valorStock = p.stock
+      const db = getFirestore()
+      const refADoc = doc(db, 'productos', idProd)
+      getDoc(refADoc).then((res) => {
+        const objetoBienFormado = [{ id: res.id, ...res.data() }]
+        let objeto = objetoBienFormado.find(p => p.id==idProd)
+        const upDoc = doc(db, 'productos', idProd)
+        updateDoc(upDoc, {stock: objeto.stock + valorStock})
+      })
+    })
     setArregloCarro([])
+  }
+
+  const terminarCompra = () => {
+    const orden = {
+      buyer: { name, tel, email },
+      items: [...arregloCarro],
+      total: {total},
+    }
+    const db = getFirestore()
+    const refCollection = collection(db, 'ordencompra')
+    addDoc(refCollection, orden).then((res) => {
+      setIdOrder(res.id);
+      setArregloCarro([])
+      setHabilitar(false)
+    })
+  }
+
+  const cancelarCompra = () => {
+    setHabilitar(false)
   }
   
   return (
     <div>
       <h1>Detalle Carrito</h1>
       {
+        !habilitar &&
         arregloCarro.map((producto)=>
           <div className='bg-gray-200 m-2 p-2 w-2/4 rounded'>
             <p>Sku: {producto.id}</p>
@@ -60,10 +108,30 @@ export default function Cart() {
         )
       }
       {
-        arregloCarro.length > 0 ?
-          (<p>Total:________________________{total}<button className='bg-gray-500 p-2 rounded m-2' onClick={comprar}>Finalizar compra</button></p>) :
-          <Link to={'/productos'}>Carrito vacio, ver Productos</Link>
-      }      
+        !habilitar &&
+        (arregloCarro.length > 0 ?
+          (<div>
+            <p>Total:________________________{total}<button className='bg-gray-500 p-2 rounded m-2' onClick={comprar}>Comprar</button></p>
+            <button className='bg-gray-500 p-2 rounded m-2' onClick={borrarTodo}>Borrar todo</button>
+          </div>) :
+          idOrder == '' ?
+          <Link to={'/productos'}>Carrito vacio, ver Productos</Link> : <p>Id de tu compra: {idOrder}</p>
+          )
+      }
+      {
+        habilitar &&
+        (<div>
+          <input type={'text'} className='border-2' placeholder="nombre" value={name} onChange={(e) => setName(e.target.value)} />
+          <br />
+          <input type={'tel'} className='border-2' placeholder="celular" value={tel} onChange={(e) => setTel(e.target.value)} />
+          <br />
+          <input type={'email'} className='border-2' placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <br />
+          <br />
+          <button className='bg-gray-500 p-2 rounded m-2' onClick={terminarCompra}>Finalizar compra</button>
+          <button className='bg-gray-500 p-2 rounded m-2' onClick={cancelarCompra}>Cancelar compra</button>
+        </div>)
+      }
     </div>
   )
 }

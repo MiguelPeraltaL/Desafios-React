@@ -1,35 +1,23 @@
 import React from 'react'
 import { useState, useEffect, useContext } from 'react'
 import ItemList from './ItemList'
-import { myContext } from '../HOCContext'
+import { collection, getDocs, getFirestore } from 'firebase/firestore'
 
 const ItemListContainer = () => {
   
-  const { product, setProduct } = useContext(myContext)
+  const [product,setProduct]=useState([])
   
   useEffect(()=>{
-
-    const imprimirProductos = ()=>{
-      return new Promise((resolve,reject)=>{
-          if(product.length === 0){
-            reject("No hay productos disponibles")
-          }else{
-            resolve(product)
-          }
+    const db = getFirestore()
+    const refCollectionProductos = collection(db, 'productos')
+    getDocs(refCollectionProductos).then((res) => {
+      let coleccion = res.docs
+      coleccion = coleccion.map((producto) => {
+        const productoBienFormado = { id: producto.id, ...producto.data() }
+        return productoBienFormado
       })
-    }
-    
-    imprimirProductos()
-    .then((result)=>{
-      setProduct(result)
+      setProduct(coleccion)
     })
-    .catch((error)=>{
-      console.log("Hay un error con los productos :" + error)
-    })
-    .finally(()=>{
-      console.log("Termino la consulta de productos")
-    })
-
   },[])
 
   return (

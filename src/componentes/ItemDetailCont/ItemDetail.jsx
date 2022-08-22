@@ -9,7 +9,7 @@ const ItemDetail = ({id, categoria, marca, modelo, precio, stock}) => {
       <p>Marca: {marca} </p>
       <p>Modelo: {modelo} </p>
       <p>Precio: {precio} </p>
-      <ItemCount stock={stock} id={id}/>
+      <ItemCount id={id}/>
     </div>
   )
 }

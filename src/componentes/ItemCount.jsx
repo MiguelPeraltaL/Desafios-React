@@ -2,13 +2,19 @@ import React from 'react'
 import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { myContext } from './HOCContext'
+import { doc, updateDoc, getFirestore } from 'firebase/firestore'
 
-const ItemCount = ({stock, id}) => {
+const ItemCount = ({id}) => {
 
     const [clickCount, setClickCount] = useState(0);
-    const [cantidad, setCantidad] = useState(stock);
+    const [cantidad, setCantidad] = useState(0);
     const [habilitar, setHabilitar] = useState(false);
-    const { product, setProduct, arregloCarro, setArregloCarro } = useContext(myContext)
+    const { prod, setProd, arregloCarro, setArregloCarro } = useContext(myContext)
+
+    useEffect(() => {
+        let cantidad2 = prod.find(p => p.id==id)
+        setCantidad(cantidad2.stock)
+    }, [prod])
 
     const contar = () => {
         clickCount < cantidad ? 
@@ -25,21 +31,27 @@ const ItemCount = ({stock, id}) => {
             setCantidad(cantidad - clickCount)
             setHabilitar(true)
 
-            let objeto = product.filter(producto=> producto.id == id)
-            const arregloByPass2 = objeto.map(p =>
-                p.id == id
-                ? { ...p, stock: clickCount }
-                : p
-            )
+            if(arregloCarro.some(p => p.id == id)){
+                const arregloByPass2 = arregloCarro.map(p =>
+                    p.id == id
+                    ? { ...p, stock: p.stock + clickCount }
+                    : p
+                )
+                setArregloCarro(arregloByPass2)
+            }
+            else{
+                const arregloByPass2 = prod.map(p =>
+                    p.id == id
+                    ? { ...p, stock: clickCount }
+                    : p
+                )
+                setArregloCarro(arregloCarro.concat(arregloByPass2))
+            }
             
-            setArregloCarro(arregloCarro.concat(arregloByPass2))
-
-            const arregloByPass = product.map(p =>
-                p.id == id
-                ? { ...p, stock: cantidad - clickCount }
-                : p
-            )
-            setProduct(arregloByPass)
+            const db = getFirestore()
+            const upDoc = doc(db, 'productos', id)
+            updateDoc(upDoc, {stock: cantidad - clickCount})
+            
             setClickCount(clickCount * 0)
         }
         else{

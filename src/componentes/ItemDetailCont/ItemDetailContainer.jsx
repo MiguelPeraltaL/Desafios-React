@@ -3,34 +3,19 @@ import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import ItemDetail from './ItemDetail'
 import { myContext } from '../HOCContext'
+import { doc, getDoc, getFirestore } from 'firebase/firestore'
 
 const ItemDetailContainer = () => {
   
-  const [prod,setProd]=useState([])
-  const { product, setProduct } = useContext(myContext)
+  const { prod, setProd } = useContext(myContext)
   const {id} = useParams()
   
   useEffect(()=>{
-
-    const imprimir = ()=>{
-      return new Promise((resolve,reject)=>{
-          if(id){
-            resolve(product.filter(producto=> producto.id == id))
-          }else{
-            reject("Producto no disponible")
-          }
-      })
-    }
-    
-    imprimir()
-    .then((result)=>{
-      setProd(result)
-    })
-    .catch((error)=>{
-      console.log("Hay un error con el producto:" + error)
-    })
-    .finally(()=>{
-      console.log("Termino la consulta de producto")
+    const db = getFirestore()
+    const refADoc = doc(db, 'productos', id)
+    getDoc(refADoc).then((res) => {
+      const objetoBienFormado = [{ id: res.id, ...res.data() }]
+      setProd(objetoBienFormado)
     })
   },[])
 
